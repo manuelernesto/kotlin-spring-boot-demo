@@ -50,9 +50,9 @@ class AuthorControl(val service: AuthorService) {
 
     @PutMapping("/{id}")
     fun update(@PathVariable id: Long, @RequestBody author: Author): ResponseEntity<Any> {
-        val isAuthor = service.getAuthor(id)
-        if (isAuthor.isPresent) {
-            author.id = isAuthor.get().id
+        val authorDB = service.getAuthor(id)
+        if (authorDB.isPresent) {
+            author.id = authorDB.get().id
             service.postAuthor(author)
             return ResponseEntity.ok(author)
         }
@@ -65,17 +65,11 @@ class AuthorControl(val service: AuthorService) {
 @Service
 class AuthorService(val repository: AuthorRepository) {
 
-    fun getAll(): List<Author> {
-        return repository.getAllAuthors()
-    }
+    fun getAll(): List<Author> = repository.getAllAuthors()
 
-    fun postAuthor(author: Author) {
-        repository.save(author)
-    }
+    fun postAuthor(author: Author) = repository.save(author)
 
-    fun deleteAuthor(id: Long) {
-        repository.deleteById(id)
-    }
+    fun deleteAuthor(id: Long) = repository.deleteById(id)
 
     fun getAuthor(id: Long) = repository.findById(id)
 
